@@ -1202,7 +1202,7 @@ CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::vector<std::strin
 /**
  * 返回“不定参数”的个数对应的数值
  */
-#define CJS_CNT1(...) CJS_MSVC_EXPAND(CJS_CNT1_ARGS(0, __VA_ARGS__, \
+#define CJS_CNT1(...) CJS_MSVC_EXPAND(CJS_CNT1_ARGS(0, ##__VA_ARGS__, \
                         32, 31, 30, 29, 28, 27, 26, 25, 24, 23, \
                         22, 21, 20, 19, 18, 17, 16, 15, 14, 13, \
                         12, 11, 10, 9, 8, 7, 6, 5, 4, 3, \
@@ -1221,6 +1221,7 @@ CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::vector<std::strin
  * const char* memberNameArray[] = { "x", "y", "zz" };
  *
  */
+#define CJS_MAKE_STRING0(...)
 #define CJS_MAKE_STRING1(x) CJS_STRING(x)
 #define CJS_MAKE_STRING2(x, ...) CJS_STRING(x),CJS_MSVC_EXPAND(CJS_MAKE_STRING1(__VA_ARGS__))
 #define CJS_MAKE_STRING3(x, ...) CJS_STRING(x),CJS_MSVC_EXPAND(CJS_MAKE_STRING2(__VA_ARGS__))
@@ -1258,7 +1259,7 @@ CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::vector<std::strin
         const char* memberNameArray[] = { CJS_MSVC_EXPAND(CJS_CONCAT(CJS_MAKE_STRING, CJS_CNT1(__VA_ARGS__))(__VA_ARGS__)) };
 
 #define CJS_MAKE_STATIC_STRING_ARRAY(...)  \
-        static const char* memberNameArray[] = { CJS_MSVC_EXPAND(CJS_CONCAT(CJS_MAKE_STRING, CJS_CNT1(__VA_ARGS__))(__VA_ARGS__)), nullptr };
+        static const char* memberNameArray[] = { CJS_MSVC_EXPAND(CJS_CONCAT(CJS_MAKE_STRING, CJS_CNT1(__VA_ARGS__))(__VA_ARGS__)) };
 
 
 /**
@@ -1268,6 +1269,7 @@ CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::vector<std::strin
  * opFunc(x); opFunc(y); opFunc(zz);
  *
  */
+#define CJS_OP_OBJECT_TO_JSON_STRING0(...)
 #define CJS_OP_OBJECT_TO_JSON_STRING(opFunc, x) CJS_MSVC_EXPAND(std::string("\"") + std::string(CJS_STRING(x)) + std::string("\":") + opFunc(x))
 #define CJS_OP_OBJECT_TO_JSON_STRING1(opFunc,x) strRet += CJS_MSVC_EXPAND(CJS_OP_OBJECT_TO_JSON_STRING(opFunc, x))
 #define CJS_OP_OBJECT_TO_JSON_STRING2(opFunc,x, ...) strRet += CJS_OP_OBJECT_TO_JSON_STRING(opFunc,x) + std::string(","); CJS_MSVC_EXPAND(CJS_OP_OBJECT_TO_JSON_STRING1(opFunc,__VA_ARGS__))
@@ -1317,6 +1319,7 @@ CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::vector<std::strin
  * jsonObjItem = cJSON_GetObjectItem(jsonObj, "zz"); opFunc(jsonObjItem, zz);
  *
  */
+#define CJS_OP_FROM_JSON_OBJECT0(...)
 #define CJS_OP_FROM_JSON_OBJECT(opFunc, x) CJS_MSVC_EXPAND(jsonObjItem = cJSON_GetObjectItem(jsonObj, CJS_STRING(x)); opFunc(jsonObjItem, x))
 #define CJS_OP_FROM_JSON_OBJECT1(opFunc,x) CJS_MSVC_EXPAND(CJS_OP_FROM_JSON_OBJECT(opFunc, x))
 #define CJS_OP_FROM_JSON_OBJECT2(opFunc,x, ...) CJS_OP_FROM_JSON_OBJECT(opFunc,x); CJS_MSVC_EXPAND(CJS_OP_FROM_JSON_OBJECT1(opFunc,__VA_ARGS__))

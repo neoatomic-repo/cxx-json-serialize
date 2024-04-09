@@ -133,6 +133,10 @@ public:
             tree, mapTree, pTree)
 };
 
+struct TZero
+{
+    CJS_JSON_SERIALIZE(TZero)
+};
 
 int main() {
 #ifdef Q_OS_WIN
