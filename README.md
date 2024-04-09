@@ -142,7 +142,7 @@ char[]（将其转换为char*字符串，或者使用strcpy进行赋值）
 
 1、在你的工程设置里，使用C++11及以上的标准；  
 2、在你的源代码里，包含本功能有关的4个源代码文件：  
-    cJSON.h    cJSON.c    cxxJsonSerialize.h    cxxJsonSerialize.h
+    cJSON.h    cJSON.c    cxxJsonSerialize.h    cxxJsonSerialize.h  
 3、在定义结构体/类的.h/.cpp文件开始，#include "cxxJsonSerialize.h"，以包含本扩展对外的头文件（注意路径）；  
 4、定义结构体/类，在其中使用宏CJS_JSON_SERIALIZE(<结构体/类名>, 成员变量名1, 成员变量名2, ....)  
 5、使用结构体/类时，声明一个结构体/类对象obj，使用obj.__cjsFromJsonString(<strJson>)、obj.__cjsToJsonString()实现结构体/类对象的序列化操作。  
@@ -151,7 +151,7 @@ char[]（将其转换为char*字符串，或者使用strcpy进行赋值）
 简单的实例见方案里的示例。  
 
 
-嵌套的复杂实例，如下：  
+嵌套的复杂示例，如下：  
 
 ```c++
 #include <iostream>
