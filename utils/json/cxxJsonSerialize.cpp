@@ -10,6 +10,9 @@
 namespace cjs {
 #endif
 
+    CJS_INF_HIDDEN std::string __cjsToJsonString() {
+        return std::string("\"\"");
+    }
 
 /**
  * 特例化：将char型转换json字符串

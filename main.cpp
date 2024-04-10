@@ -133,14 +133,25 @@ public:
             tree, mapTree, pTree)
 };
 
+/**
+ * msvc编译器，目前没搞定变量为0的情况
+ */
+#ifndef _MSC_VER
+
 struct TZero
 {
     CJS_JSON_SERIALIZE(TZero)
 };
 
+#endif
+
 int main() {
 #ifdef Q_OS_WIN
    system("chcp 65001");
+#endif
+
+#ifndef _MSC_VER
+    int val = CJS_CNT1();
 #endif
 
     TPortfolio portfolioObj;

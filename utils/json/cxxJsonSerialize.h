@@ -327,6 +327,7 @@
  * 用位结构（在spring应用里有吗？）
  * 5、不支持静态成员变量。
  * 6、派生类的不确定。扩展的初衷是作用于配置或者用于数据交互的结构体/类对象上，所以派生类的支持，需要单独的做工作。
+ * 7、msvc编译器未实现参数数量为0的情况。
  *
  *
  * 未来
@@ -378,6 +379,8 @@ namespace cjs {
      * 以下的定义，是实现对象向json字符串转换的功能
      */
 
+
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString();
 
 /**
  * 模板化：将char数组类型转换为json字符串
@@ -1221,7 +1224,7 @@ CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::vector<std::strin
  * const char* memberNameArray[] = { "x", "y", "zz" };
  *
  */
-#define CJS_MAKE_STRING0(...)
+#define CJS_MAKE_STRING0(...) CJS_MSVC_EXPAND(nullptr)
 #define CJS_MAKE_STRING1(x) CJS_STRING(x)
 #define CJS_MAKE_STRING2(x, ...) CJS_STRING(x),CJS_MSVC_EXPAND(CJS_MAKE_STRING1(__VA_ARGS__))
 #define CJS_MAKE_STRING3(x, ...) CJS_STRING(x),CJS_MSVC_EXPAND(CJS_MAKE_STRING2(__VA_ARGS__))
