@@ -31,7 +31,7 @@ jsonObj["id"] == 123
 
 However, what we actually need more is to be able to directly deserialize ``jsonStr`` into a class/struct instance defined by us at the business layer, like some tool libraries in java (such as Alibaba's fastjson, etc.); Or serialize an instance of a class/struct object directly into a jsonStr string.
 
-Students who use C++ a lot may not be familiar with the use of serialization/deserialization in Java, so they are afraid or unclear. However, on the one hand, this convenience and comprehensive efficiency based on reflection have been verified for a long time; On the other hand, to make it clearer, let's take FastJSON as an example, and its basic usage in Java is as follows:
+Mates who use C++ a lot may not be familiar with the use of serialization/deserialization in Java, so they are afraid or unclear. However, on the one hand, this convenience and comprehensive efficiency based on reflection have been verified for a long time; On the other hand, to make it clearer, let's take FastJSON as an example, and its basic usage in Java is as follows:
 
 ```java
 package com.neoatomic.example;
