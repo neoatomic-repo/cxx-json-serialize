@@ -48,7 +48,7 @@ struct TVectorType {
 
     CJS_JSON_SERIALIZE(TVectorType, vecC, vecUc, vecS, vecUs, vecI,
             vecUi, vecL, vecUl, vecLl, vecUll,
-            vecF, vecD, vecB, vecStr);
+            vecF, vecD, vecB, vecStr)
 };
 
 struct TStringMapType {
@@ -98,6 +98,7 @@ struct TPortfolio{
     TTree tree;
     std::map<std::string, TTree> mapTree;
     TTree *pTree;
+    std::set<int> setType;
 
     TPortfolio() {
         pTree = new TTree();
@@ -108,7 +109,7 @@ struct TPortfolio{
     }
 
     CJS_JSON_SERIALIZE(TPortfolio, id, name, baseType, vecBasetype, mapBasetype,
-            tree, mapTree, pTree)
+            tree, mapTree, pTree, setType)
 };
 
 class CPortfolio {

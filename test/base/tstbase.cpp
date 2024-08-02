@@ -18,6 +18,9 @@ void TstBase::test()
     portfolioObj.vecBasetype.push_back(TBaseType());
     portfolioObj.tree.items.push_back(TTreeItem());
     portfolioObj.tree.items[0].children.push_back(TTreeItem());
+    portfolioObj.setType.insert(1);
+    portfolioObj.setType.insert(10);
+    portfolioObj.setType.insert(123);
 
     // struct object TO json string
     std::string strJson = portfolioObj.__cjsToJsonString();

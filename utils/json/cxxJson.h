@@ -30,6 +30,7 @@
 
 #include <cstddef>
 #include <map>
+#include <set>
 #include <string>
 #include <type_traits>
 #include <typeinfo>
@@ -161,6 +162,7 @@
  * 4、std::vector类型。std::vector的元素类型，覆盖了上述1中的基础类型，以及使用了CJS_JSON_SERIALIZE扩展宏的结构体/类。
  * 5、std::map<std::string, T>类型。其中T包含上述1中的基础类型，以及使用了CJS_JSON_SERIALIZE扩展宏的结构体/类。
  * 6、指针。使用了CJS_JSON_SERIALIZE扩展宏的结构体/类指针，目前需要先在外部申请资源后，再进行序列化操作。
+ * 7、std::set类型。以[]数组的形式存储于json字符串中，不支持std::set<bool>类型。
  *
  * 二、成员变量的数量
  * 本实现中，我们限定了最多支持63个成员变量的json序列化操作。当然，也可以按照既有的格式，对CJS_CNT1等宏做扩展，以便支持更
@@ -373,6 +375,12 @@
  *
  *
  * 日志
+ * 2024.08.02
+ * 新增
+ * 添加了对std::set的支持，但是对应的在json字符串里是以[]数组的形式来表示值的，这确实是个怪异的行为，这是因为{}表示的Object，必需要有
+ * 键，然而，我们不想给set类型的造个键。
+ *
+ *
  * 2024.07.02
  * 修改
  * 1、将文件名从cxxJsonSerialize.h/cpp，修改成为cxxJson.h/cpp。注意，很抱歉，这种修改是不兼容的，如果你在过去已经使用了
@@ -388,6 +396,7 @@
  * cJSON_ReplaceNonAlphanumericWithUnderscore、cJSON_RegulateKeyForC、cJSON_CopyContext等内容使用的辅助方法；兼容式的修改了
  * parse_object等内部使用的方法。
  * 2、新增了test文件夹，以添加测试代码。
+ *
  *
  * 2024.04.03
  * 新增
@@ -825,6 +834,117 @@ CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::vector<std::strin
      */
     CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::map<std::string, std::string>& obj);
 
+    /**
+     * 模板化：将元素为某种类型的std::set转换为json字符串
+     * @tparam T
+     * @param obj
+     * @return
+     */
+    template <typename T>
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<T>& obj) {
+        std::string strRet = "[";
+        std::string strSep = "";
+        for (const T& item : obj) {
+            strRet += strSep;
+            strRet += std::string("{\"");
+            strRet += item.__cjsToJsonString();
+            strRet += std::string("}");
+            strSep = ",";
+        }
+        strRet += "]";
+        return strRet;
+    }
+
+    /**
+     * 特例化：将std::set<char>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<char>& obj);
+
+    /**
+     * 特例化：将std::set<unsigned char>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<unsigned char>& obj);
+
+    /**
+     * 特例化：将std::set<short>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<short>& obj);
+
+    /**
+     * 特例化：将std::set<unsigned short>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<unsigned short>& obj);
+
+    /**
+     * 特例化：将std::set<int>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<int>& obj);
+
+    /**
+     * 特例化：将std::set<unsigned int>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<unsigned int>& obj);
+
+    /**
+     * 特例化：将std::set<long>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<long>& obj);
+
+    /**
+     * 特例化：将std::set<unsigned long>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<unsigned long>& obj);
+
+    /**
+     * 特例化：将std::set<long long>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<long long>& obj);
+
+    /**
+     * 特例化：将std::set<unsigned long long>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<unsigned long long>& obj);
+
+    /**
+     * 特例化：将std::set<float>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<float>& obj);
+
+    /**
+     * 特例化：将std::set<double>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<double>& obj);
+
+    /**
+     * 特例化：将std::set<std::string>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::set<std::string>& obj);
 
     /**
      * 以下的定义，是实现cJSON对象向C++（结构体）类型对象转换的功能
@@ -1238,6 +1358,129 @@ CJS_INF_HIDDEN extern std::string __cjsToJsonString(const std::vector<std::strin
             }
         }
     }
+
+    /**
+         * 特例化：jsonObj对象转换为std::set<char>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<char>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<unsigned char>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<unsigned char>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<short>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<short>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<unsigned short>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<unsigned short>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<std::set<int>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<int>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<std::set<unsigned int>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<unsigned int>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<long>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<long>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<unsigned long>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<unsigned long>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<long long>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<long long>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<unsigned long long>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<unsigned long long>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<float>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<float>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<double>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<double>& obj);
+
+        /**
+         * 特例化：jsonObj对象转换为std::set<std::string>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<std::string>& obj);
+
+        /**
+         * 模板化：jsonObj对象转换为std::set<T>型变量
+         * @param jsonObj
+         * @param obj
+         * @return
+         */
+        template <typename T>
+        CJS_INF_HIDDEN extern void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<T>& obj) {
+            if (jsonObjItem && jsonObjItem->type == cJSON_Array) {
+                obj.clear();
+                int cnt = cJSON_GetArraySize(jsonObjItem);
+                for (int i = 0; i < cnt; ++i) {
+                    T objItem;
+                    objItem.__cjsFromJsonObject(cJSON_GetArrayItem(jsonObjItem, i));
+                    obj.insert(objItem);
+                }
+            }
+        }
 
     CJS_INF_HIDDEN extern void __cjsSetCJsonContext(cJSON* item);
 

@@ -513,6 +513,144 @@ namespace cjs {
         return strRet;
     }
 
+    template<typename T>
+    static std::string __cjsToJsonString_set_internal(const std::set<T> &obj) {
+        std::string strRet = "[";
+        std::string strSep = "";
+        for (const T& item : obj) {
+            strRet += strSep;
+            strRet += std::to_string(item);
+            strSep = ",";
+        }
+        strRet += "]";
+        return strRet;
+    }
+
+    /**
+     * 特例化：将std::set<char>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<char> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<unsigned char>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<unsigned char> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<short>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<short> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<unsigned short>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<unsigned short> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<int>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<int> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<unsigned int>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<unsigned int> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<long>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<long> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<unsigned long>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<unsigned long> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<long long>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<long long> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<unsigned long long>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<unsigned long long> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<float>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<float> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+     * 特例化：将std::set<double>型转换json字符串
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<double> &obj) {
+        return __cjsToJsonString_set_internal(obj);
+    }
+
+    /**
+    * 特例化：将std::set<std::string>型转换json字符串
+    * @param obj
+    * @return
+    */
+    CJS_INF_HIDDEN std::string __cjsToJsonString(const std::set<std::string> &obj) {
+        std::string strRet = "[";
+        std::string strSep = "";
+        for (const std::string& item : obj) {
+            strRet += strSep;
+            strRet += std::string("\"") + item + std::string("\"");
+            strSep = ",";
+        }
+        strRet += "]";
+        return strRet;
+    }
+
 
     /**
      * convert json object to struct/baseType object
@@ -1056,6 +1194,161 @@ namespace cjs {
      */
     CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::map<std::string, std::string>& obj) {
         __cjsFromJsonObject_map_internal(jsonObjItem, obj);
+    }
+
+    template <typename T>
+    static void __cjsFromJsonObject_set_internal(cJSON *jsonObjItem, std::set<T> &obj) {
+        if (!jsonObjItem || jsonObjItem->type != cJSON_Array) {
+            return;
+        }
+
+        obj.clear();
+        int cnt = cJSON_GetArraySize(jsonObjItem);
+        for (int i = 0; i < cnt; ++i) {
+            T val;
+            __cjsFromJsonObject(cJSON_GetArrayItem(jsonObjItem, i), val);
+            obj.insert(val);
+        }
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<char>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<char>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<unsigned char>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<unsigned char>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<short>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<short>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<unsigned short>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<unsigned short>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<std::set<int>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<int>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<std::set<unsigned int>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<unsigned int>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<long>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<long>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<unsigned long>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<unsigned long>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<long long>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<long long>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<unsigned long long>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<unsigned long long>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<float>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<float>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<double>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<double>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<bool>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<bool>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
+    }
+
+    /**
+     * 特例化：jsonObj对象转换为std::set<std::string>型变量
+     * @param jsonObj
+     * @param obj
+     * @return
+     */
+    CJS_INF_HIDDEN void __cjsFromJsonObject(cJSON* jsonObjItem, std::set<std::string>& obj) {
+        __cjsFromJsonObject_set_internal(jsonObjItem, obj);
     }
 
     CJS_INF_HIDDEN void __cjsSetCJsonContext(cJSON *item)
